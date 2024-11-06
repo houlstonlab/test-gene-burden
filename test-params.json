@@ -1,0 +1,4 @@
+{
+    "cohorts_info"  : "$SCRATCH/toy-datasets/cohort-counts/cohorts_info.csv",
+    "cohorts"       : "$SCRATCH/toy-datasets/cohort-counts/*.aggregate.tsv"
+}
