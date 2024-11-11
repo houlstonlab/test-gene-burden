@@ -11,12 +11,14 @@ mkdir -p test/ test/input
 cd test/
 
 # Download test data
-URL="https://raw.githubusercontent.com/houlstonlab/toy-datasets/refs/heads/main/cohort-counts/"
-for file in cohorts_info.csv general.categoryA.aggregate.tsv general.categoryB.aggregate.tsv pheno.categoryA.aggregate.tsv pheno.categoryB.aggregate.tsv; do
-    wget -O input/$file $URL/$file
-done
+URL="https://figshare.com/ndownloader/files"
 
-# Run nextflow
+wget -c $URL/50357922 -O input/cohorts_info.csv
+wget -c $URL/50357925 -O input/general.categoryA.aggregate.tsv
+wget -c $URL/50357928 -O input/general.categoryB.aggregate.tsv
+wget -c $URL/50357931 -O input/pheno.categoryA.aggregate.tsv
+wget -c $URL/50357934 -O input/pheno.categoryB.aggregate.tsv
+
 # nextflow run houlstonlab/test-gene-burden -r test-gh \
 nextflow run ../main.nf \
     --output_dir ./results/ \
