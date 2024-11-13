@@ -1,3 +1,4 @@
+[![Runs successfully](https://github.com/houlstonlab/test-gene-burden/actions/workflows/runs-successfully.yml/badge.svg?branch=main)](https://github.com/houlstonlab/test-gene-burden/actions/workflows/runs-successfully.yml)
 ### Introduction
 
 This workflow tests the excess burden of variants in cases of a certain phenotype compared to a control poulation.
