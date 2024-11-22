@@ -19,6 +19,9 @@ wget -c $URL/50357928 -O input/general.categoryB.aggregate.tsv
 wget -c $URL/50357931 -O input/pheno.categoryA.aggregate.tsv
 wget -c $URL/50357934 -O input/pheno.categoryB.aggregate.tsv
 
+# Run nextflow
+module load Nextflow
+
 # nextflow run houlstonlab/test-gene-burden -r test-gh \
 nextflow run ../main.nf \
     --output_dir ./results/ \

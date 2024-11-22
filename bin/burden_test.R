@@ -5,19 +5,33 @@ args <- commandArgs(trailingOnly = TRUE)
 cases <- args[1]
 controls <- args[2]
 model <- args[3]
-output_file <- args[4] 
+tested_file <- args[4] 
+not_tested_file <- args[5] 
+
+# Read and join cases and controls
+d <- dplyr::left_join(
+  readr::read_tsv(cases),
+  readr::read_tsv(controls)
+)
+# Add a column for the model
+d <- dplyr::mutate(d, model = model)
+
+# Missing in controls
+if ( model == 'DOM') {
+  not_tested <- dplyr::filter(d,  CONTROL_COUNT_DOM == 0 | is.na(CONTROL_COUNT_DOM))
+  d <- dplyr::filter(d,  CONTROL_COUNT_DOM > 0 & !is.na(CONTROL_COUNT_DOM))
+} else if ( model == 'REC') {
+  not_tested <- dplyr::filter(d,  CONTROL_COUNT_REC == 0 | is.na(CONTROL_COUNT_REC))
+  d <- dplyr::filter(d,  CONTROL_COUNT_REC> 0 & !is.na(CONTROL_COUNT_REC))
+} else {
+  stop('Model must be DOM or REC')
+}
+
+# Write output
+readr::write_tsv(not_tested, not_tested_file) 
 
 # Function
-burden_test <- function(cases, controls, model = 'DOM') {
-  # Read and join cases and controls
-  d <- dplyr::inner_join(
-    readr::read_tsv(cases),
-    readr::read_tsv(controls)
-  )
-  
-  # Add a column for the model
-  d <- dplyr::mutate(d, model = model)
-
+burden_test <- function(d, model = 'DOM') {
   # Get the a and c cells based on the model
   d <- dplyr::mutate(
     d,
@@ -57,10 +71,9 @@ burden_test <- function(cases, controls, model = 'DOM') {
 
 # Call burden_test
 res <- burden_test(
-  cases,
-  controls,
+  d,
   model = model
 )
 
 # Write output
-readr::write_tsv(res, output_file) 
+readr::write_tsv(res, tested_file) 
