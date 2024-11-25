@@ -19,6 +19,7 @@ cohorts_info_ch = Channel.fromPath(params.cohorts_info)
 model_ch = Channel.of('DOM', 'REC')
 
 workflow  {
+    // Load cohorts
     cohorts_info_ch
         | combine(cohorts_ch , by: 0)
         | READ
@@ -27,15 +28,25 @@ workflow  {
             controls: it[1] == 'controls'
         }
         | set { counts }
+
+    // Run tests
     counts.cases 
         | combine(counts.controls, by: 2)
         | combine(model_ch)
         | filter { it[0] != 'ALL' }
         | TEST
-        | map { it.last() }
+        | multiMap {
+            tested      : ['tested', it[4]]
+            not_tested  : ['not_tested', it[5]]
+        }
+        | set { results }
+
+    // Summary
+    results.tested
+        | concat(results.not_tested)
         | collectFile (
             keepHeader: true,
-            name: 'output.tsv',
             storeDir: "${params.output_dir}/summary",
         )
+        { it -> [ "${it.first()}.tsv", it.last() ] } 
 }
