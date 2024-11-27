@@ -15,12 +15,11 @@ process TEST {
 
     output:
     tuple val(category), val(case_cohort), val(cont_cohort), val(model),
-          path("${category}.${case_cohort}.${cont_cohort}.${model}.tsv"), 
-          path("not_tested.${case_cohort}.${cont_cohort}.${model}.tsv") 
-    
+          path("${category}.${case_cohort}.${cont_cohort}.${model}.tsv")
+
     script:
     """
     #!/bin/bash
-    burden_test.R ${case_file} ${cont_file} ${model} ${category}.${case_cohort}.${cont_cohort}.${model}.tsv not_tested.${case_cohort}.${cont_cohort}.${model}.tsv
+    burden_test.R ${case_file} ${cont_file} ${model} ${category}.${case_cohort}.${cont_cohort}.${model}.tsv
     """
 }

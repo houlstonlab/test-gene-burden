@@ -35,15 +35,6 @@ workflow  {
         | combine(model_ch)
         | filter { it[0] != 'ALL' }
         | TEST
-        | multiMap {
-            tested      : ['tested', it[4]]
-            not_tested  : ['not_tested', it[5]]
-        }
-        | set { results }
-
-    // Summary
-    results.tested
-        | concat(results.not_tested)
         | collectFile (
             keepHeader: true,
             storeDir: "${params.output_dir}/summary",
