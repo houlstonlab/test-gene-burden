@@ -39,5 +39,5 @@ workflow  {
             keepHeader: true,
             storeDir: "${params.output_dir}/summary",
         )
-        { it -> [ "${it.first()}.tsv", it.last() ] } 
+        { it -> [ "${it[1]}.${it[2]}.test.tsv", it.last() ] } 
 }
