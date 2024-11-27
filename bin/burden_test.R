@@ -29,7 +29,10 @@ burden_test <- function(dat, model = 'DOM') {
     b = na.omit(unique(dat$CASE_SIZE)),
     d = na.omit(unique(dat$CONTROL_SIZE))
   )
-
+  
+  # Remove rows with 0 in a
+  dat <- dplyr::filter(dat, a > 0)
+  
   # Perform Fisher's exact test, by gene
   dat <- dplyr::group_split(dat, gene)
   res <- purrr::map_df(
