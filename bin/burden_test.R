@@ -29,36 +29,40 @@ burden_test <- function(dat, model = 'DOM') {
     b = na.omit(unique(dat$CASE_SIZE)),
     d = na.omit(unique(dat$CONTROL_SIZE))
   )
-  
+
   # Remove rows with 0 in a
   dat <- dplyr::filter(dat, a > 0)
   
-  # Perform Fisher's exact test, by gene
-  dat <- dplyr::group_split(dat, gene)
-  res <- purrr::map_df(
-    dat,
-    ~{
-        # Create a 2 x 2 table
-        mat <- with(
-          .x,
-          rbind(
-          c(a, b - a),
-          c(c, d - c)
-        )
-        )
-
-        # Apply test
-        df <- broom::tidy(
-          fisher.test(
-            mat
+  if (nrow(dat) == 0) {
+    return(data.frame())
+  } else {
+    # Perform Fisher's exact test, by gene
+    dat <- dplyr::group_split(dat, gene)
+    res <- purrr::map_df(
+      dat,
+      ~{
+          # Create a 2 x 2 table
+          mat <- with(
+            .x,
+            rbind(
+            c(a, b - a),
+            c(c, d - c)
           )
-        )
-        dplyr::bind_cols(.x, df)
-      }
-  )
+          )
 
-  # Adjust for multiple testing
-  res <- dplyr::mutate(res, p.adj = stats::p.adjust(p.value, method = 'BH'))
+          # Apply test
+          df <- broom::tidy(
+            fisher.test(
+              mat
+            )
+          )
+          dplyr::bind_cols(.x, df)
+        }
+    )
+
+    # Adjust for multiple testing
+    res <- dplyr::mutate(res, p.adj = stats::p.adjust(p.value, method = 'BH'))
+  }
   
   return(res)
 }
