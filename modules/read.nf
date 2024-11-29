@@ -5,7 +5,7 @@ process READ {
 
     container params.rocker
 
-    publishDir("${params.output_dir}/cohorts", mode: 'copy')
+    publishDir("${params.output_dir}/counts", mode: 'copy')
 
     input:
     tuple val(cohort), val(type), val(size), val(category), path(file)

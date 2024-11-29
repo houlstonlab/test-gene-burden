@@ -1,20 +1,20 @@
 #!/usr/bin/env Rscript
 
 # Capture command-line arguments
-args <- commandArgs(trailingOnly = TRUE)
-cases <- args[1]
-controls <- args[2]
-model <- args[3]
-tested_file <- args[4] 
+args        <- commandArgs(trailingOnly = TRUE)
+cases       <- args[1]
+controls    <- args[2]
+model       <- args[3]
+output_file <- args[4] 
 
 # Read and join cases and controls
-d <- dplyr::left_join(
+cases_controls <- dplyr::left_join(
   readr::read_tsv(cases),
   readr::read_tsv(controls)
 )
 
 # Function
-burden_test <- function(dat, model = 'DOM') {
+test_burden <- function(dat, model = 'DOM') {
   # Add a column for the model
   dat <- dplyr::mutate(dat, model = model)
 
@@ -50,13 +50,25 @@ burden_test <- function(dat, model = 'DOM') {
           )
           )
 
+          # clean counts table
+          counts <- dplyr::select(
+            .x,
+            model,
+            category,
+            gene,
+            case_count = a,
+            case_size = b,
+            control_count = c,
+            control_size = d
+          )
+
           # Apply test
-          df <- broom::tidy(
+          tst <- broom::tidy(
             fisher.test(
               mat
             )
           )
-          dplyr::bind_cols(.x, df)
+          dplyr::bind_cols(counts, tst)
         }
     )
 
@@ -67,11 +79,14 @@ burden_test <- function(dat, model = 'DOM') {
   return(res)
 }
 
-# Call burden_test
-res <- burden_test(
-  d,
+# Call test_burden
+gene_burden <- test_burden(
+  cases_controls,
   model = model
 )
 
 # Write output
-readr::write_tsv(res, tested_file) 
+readr::write_tsv(
+  gene_burden,
+  output_file
+)
