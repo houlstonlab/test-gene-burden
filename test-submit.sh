@@ -16,8 +16,8 @@ URL="https://figshare.com/ndownloader/files"
 wget -c $URL/50357922 -O input/cohorts_info.csv
 wget -c $URL/50357925 -O input/general.categoryA.aggregate.tsv
 wget -c $URL/50357928 -O input/general.categoryB.aggregate.tsv
-wget -c $URL/50357931 -O input/pheno.categoryA.aggregate.tsv
-wget -c $URL/50357934 -O input/pheno.categoryB.aggregate.tsv
+wget -c $URL/51077813 -O input/pheno.categoryA.aggregate.tsv
+wget -c $URL/51077816 -O input/pheno.categoryB.aggregate.tsv
 
 # Run nextflow
 module load Nextflow

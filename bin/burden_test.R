@@ -5,7 +5,9 @@ args        <- commandArgs(trailingOnly = TRUE)
 cases       <- args[1]
 controls    <- args[2]
 model       <- args[3]
-output_file <- args[4] 
+n_cases     <- args[4]
+n_vars      <- args[5]
+output_file <- args[6] 
 
 # Read and join cases and controls
 cases_controls <- dplyr::left_join(
@@ -31,7 +33,8 @@ test_burden <- function(dat, model = 'DOM') {
   )
 
   # Remove rows with 0 in a
-  dat <- dplyr::filter(dat, a > 0)
+  dat <- dplyr::filter(dat, a >= as.integer(n_cases))
+  dat <- dplyr::filter(dat, CASE_NVAR >= as.integer(n_vars))
   
   if (nrow(dat) == 0) {
     return(data.frame())
@@ -56,6 +59,7 @@ test_burden <- function(dat, model = 'DOM') {
             model,
             category,
             gene,
+            nvar = CASE_NVAR,
             case_count = a,
             case_size = b,
             control_count = c,

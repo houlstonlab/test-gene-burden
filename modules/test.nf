@@ -20,6 +20,6 @@ process TEST {
     script:
     """
     #!/bin/bash
-    burden_test.R ${case_file} ${cont_file} ${model} ${category}.${case_cohort}.${cont_cohort}.${model}.tsv
+    burden_test.R ${case_file} ${cont_file} ${model} ${params.n_cases} ${params.n_vars} ${category}.${case_cohort}.${cont_cohort}.${model}.tsv
     """
 }

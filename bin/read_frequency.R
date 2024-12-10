@@ -21,6 +21,7 @@ read_frequency <- function(fl, category, size, type = 'controls') {
     # Estiamte case count from dominant and recessive models from summary data
     d <- dplyr::summarise(
       d,
+      CONTROL_NVAR = sum(nvar),
       CONTROL_COUNT_DOM = sum(ac),
       CONTROL_COUNT_REC = round((round(ac/an)^2) * af) + nhom,
       CONTROL_SIZE = size
@@ -29,6 +30,7 @@ read_frequency <- function(fl, category, size, type = 'controls') {
     # Case counts from genotype counts
       d <- dplyr::summarise(
         d,
+        CASE_NVAR = sum(nvar),
         CASE_COUNT_DOM = het + hom,
         CASE_COUNT_REC = hom + ch,
         CASE_SIZE = size

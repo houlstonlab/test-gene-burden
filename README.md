@@ -25,8 +25,11 @@ nextflow run houlstonlab/test-gene-burden \
 
 - `cohorts_info`: a csv with cohort information. Expected to have three columns `cohort`, `type` and `size`
 - `cohorts`     : tsv files with count of individuals with qualifying variants
-  - For cases, it expects 4 columns `gene`, `het`, `hom`, and `ch`
+  - For cases, it expects 4 columns `gene`, `nvar`, `het`, `hom`, and `ch`
   - For controls, it expects `gene`, `nvar`, `ac`, `an`, `af`, and `nhom`
+- Parameters
+  - `n_cases`: The min number of cases modified in each gene 
+  - `n_vars`: The min number of variants identified in each gene 
     
 ### Output
 
